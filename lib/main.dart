@@ -18,4 +18,3 @@ class MyApp extends StatelessWidget {
     return const SizedBox();
   }
 }
-
