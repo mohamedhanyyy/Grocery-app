@@ -17,6 +17,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   @override
+  int x=99;
   Widget build(BuildContext context) {
     final Color color = Utils(context).color;
     // Size size = Utils(context).getScreenSize;
