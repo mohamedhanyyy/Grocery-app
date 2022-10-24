@@ -7,7 +7,8 @@ import 'package:grocery_app/screens/user.dart';
 import 'package:grocery_app/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/dark_theme_provider.dart';
+import '../providers/cart_provider.dart';
+import '../providers/dark_theme_provider.dart';
 import 'cart/cart_screen.dart';
 
 class BottomBarScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class BottomBarScreen extends StatefulWidget {
 }
 
 class _BottomBarScreenState extends State<BottomBarScreen> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
   final List<Map<String, dynamic>> _pages = [
     {
       'page': const HomeScreen(),
@@ -46,20 +47,21 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   @override
   Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
-    bool isDark = themeState.getDarkTheme;
+
+    bool _isDark = themeState.getDarkTheme;
     return Scaffold(
       // appBar: AppBar(
       //   title: Text( _pages[_selectedIndex]['title']),
       // ),
       body: _pages[_selectedIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: isDark ? Theme.of(context).cardColor : Colors.white,
+        backgroundColor: _isDark ? Theme.of(context).cardColor : Colors.white,
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: _selectedIndex,
-        unselectedItemColor: isDark ? Colors.white10 : Colors.black12,
-        selectedItemColor: isDark ? Colors.lightBlue.shade200 : Colors.black87,
+        unselectedItemColor: _isDark ? Colors.white10 : Colors.black12,
+        selectedItemColor: _isDark ? Colors.lightBlue.shade200 : Colors.black87,
         onTap: _selectedPage,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -74,7 +76,8 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
             label: "Categories",
           ),
           BottomNavigationBarItem(
-            icon: Badge(
+            icon: Consumer<CartProvider>(builder: (_, myCart, ch) {
+              return Badge(
                 toAnimate: true,
                 shape: BadgeShape.circle,
                 badgeColor: Colors.blue,
@@ -82,9 +85,13 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                 position: BadgePosition.topEnd(top: -7, end: -7),
                 badgeContent: FittedBox(
                     child: TextWidget(
-                        text: '1', color: Colors.white, textSize: 15)),
+                        text: myCart.getCartItems.length.toString(),
+                        color: Colors.white,
+                        textSize: 15)),
                 child: Icon(
-                    _selectedIndex == 2 ? IconlyBold.buy : IconlyLight.buy)),
+                    _selectedIndex == 2 ? IconlyBold.buy : IconlyLight.buy),
+              );
+            }),
             label: "Cart",
           ),
           BottomNavigationBarItem(

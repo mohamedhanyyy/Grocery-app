@@ -21,13 +21,13 @@ class AuthButton extends StatelessWidget {
           ),
           onPressed: () {
             fct();
-           },
+            // _submitFormOnLogin();
+          },
           child: TextWidget(
             text: buttonText,
             textSize: 18,
             color: Colors.white,
-          ),
-      ),
+          )),
     );
   }
 }

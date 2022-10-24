@@ -5,8 +5,11 @@ import 'package:grocery_app/inner_screens/feeds_screen.dart';
 import 'package:grocery_app/inner_screens/on_sale_screen.dart';
 import 'package:grocery_app/services/utils.dart';
 import 'package:grocery_app/widgets/text_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../consts/contss.dart';
+import '../models/products_model.dart';
+import '../providers/products_provider.dart';
 import '../services/global_methods.dart';
 import '../widgets/feed_items.dart';
 import '../widgets/on_sale_widget.dart';
@@ -25,7 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final themeState = utils.getTheme;
     final Color color = Utils(context).color;
     Size size = utils.getScreenSize;
-
+    final productProviders = Provider.of<ProductsProvider>(context);
+    List<ProductModel> allProducts = productProviders.getProducts;
+    List<ProductModel> productsOnSale = productProviders.getOnSaleProducts;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -95,10 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: SizedBox(
                     height: size.height * 0.24,
                     child: ListView.builder(
-                        itemCount: 10,
+                        itemCount: productsOnSale.length < 10
+                            ? productsOnSale.length
+                            : 10,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (ctx, index) {
-                          return const OnSaleWidget();
+                          return ChangeNotifierProvider.value(
+                              value: productsOnSale[index],
+                              child: const OnSaleWidget());
                         }),
                   ),
                 ),
@@ -140,9 +149,15 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisCount: 2,
               padding: EdgeInsets.zero,
               // crossAxisSpacing: 10,
-              childAspectRatio: size.width / (size.height * 0.59),
-              children: List.generate(4, (index) {
-                return const FeedsWidget();
+              childAspectRatio: size.width / (size.height * 0.61),
+              children: List.generate(
+                  allProducts.length < 4
+                      ? allProducts.length // length 3
+                      : 4, (index) {
+                return ChangeNotifierProvider.value(
+                  value: allProducts[index],
+                  child: const FeedsWidget(),
+                );
               }),
             )
           ],

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/inner_screens/cat_screen.dart';
 import 'package:grocery_app/widgets/text_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/dark_theme_provider.dart';
+import '../providers/dark_theme_provider.dart';
 
 class CategoriesWidget extends StatelessWidget {
   const CategoriesWidget(
@@ -15,12 +16,15 @@ class CategoriesWidget extends StatelessWidget {
   final Color passedColor;
   @override
   Widget build(BuildContext context) {
-     final themeState = Provider.of<DarkThemeProvider>(context);
-    double screenWidth = MediaQuery.of(context).size.width;
+    // Size size = MediaQuery.of(context).size;
+    final themeState = Provider.of<DarkThemeProvider>(context);
+    double _screenWidth = MediaQuery.of(context).size.width;
     final Color color = themeState.getDarkTheme ? Colors.white : Colors.black;
     return InkWell(
       onTap: () {
-       },
+        Navigator.pushNamed(context, CategoryScreen.routeName,
+            arguments: catText);
+      },
       child: Container(
         // height: _screenWidth * 0.6,
         decoration: BoxDecoration(
@@ -34,12 +38,12 @@ class CategoriesWidget extends StatelessWidget {
         child: Column(children: [
           // Container for the image
           Container(
-            height: screenWidth * 0.3,
-            width: screenWidth * 0.3,
-            decoration:  BoxDecoration(
+            height: _screenWidth * 0.3,
+            width: _screenWidth * 0.3,
+            decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
-                  imgPath,
+                    imgPath,
                   ),
                   fit: BoxFit.fill),
             ),
